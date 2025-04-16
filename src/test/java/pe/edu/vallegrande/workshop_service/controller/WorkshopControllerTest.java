@@ -5,13 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import pe.edu.vallegrande.workshop_service.dto.WorkshopResponseDto;
+import pe.edu.vallegrande.workshop_service.service.KafkaProducerService;
 import pe.edu.vallegrande.workshop_service.service.WorkshopService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.time.LocalDate;
-
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class WorkshopControllerTest {
@@ -22,9 +20,11 @@ public class WorkshopControllerTest {
     @BeforeEach
     void setup() {
         service = Mockito.mock(WorkshopService.class);
-        WorkshopController controller = new WorkshopController(service);
+        KafkaProducerService kafkaProducerService = Mockito.mock(KafkaProducerService.class);
+        WorkshopController controller = new WorkshopController(service, kafkaProducerService);
         webTestClient = WebTestClient.bindToController(controller).build();
     }
+
 
     @Test
     void testGetAllWorkshops() {

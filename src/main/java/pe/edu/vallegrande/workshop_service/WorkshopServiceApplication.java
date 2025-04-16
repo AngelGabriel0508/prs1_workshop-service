@@ -10,7 +10,7 @@ public class WorkshopServiceApplication {
 	public static void main(String[] args) {
 		// Cargar variables del .env ubicado en la raíz del proyecto
 		Dotenv dotenv = Dotenv.configure()
-				.directory("./workshop-service") // asumiendo que estás en: nph-prs/workshop-service
+				.directory(".") // asumiendo que estás en: nph-prs/workshop-service
 				.ignoreIfMalformed()
 				.ignoreIfMissing()
 				.load();
