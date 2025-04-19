@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.vallegrande.workshop_service.dto.WorkshopKafkaEventDto;
 import pe.edu.vallegrande.workshop_service.dto.WorkshopRequestDto;
 import pe.edu.vallegrande.workshop_service.dto.WorkshopResponseDto;
+import pe.edu.vallegrande.workshop_service.service.KafkaProducerService;
 import pe.edu.vallegrande.workshop_service.service.WorkshopService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 public class WorkshopController {
 
     private final WorkshopService service;
+    private final KafkaProducerService kafkaProducerService;
 
     /**
      * 🔹 Listado de talleres con filtros opcionales:
@@ -81,5 +84,14 @@ public class WorkshopController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> delete(@PathVariable Integer id) {
         return service.deletePermanent(id);
+    }
+
+
+    // 🔹 TEST KAFKA (envío manual)
+    @PostMapping("/test-kafka")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<Void> sendTestKafkaEvent(@RequestBody WorkshopKafkaEventDto dto) {
+        kafkaProducerService.sendWorkshopEvent(dto);
+        return Mono.empty(); // 🔁 No hay respuesta, solo se envía
     }
 }
